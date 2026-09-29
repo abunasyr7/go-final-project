@@ -11,14 +11,14 @@ import (
 )
 
 const schema = `
-CREATE TABLE schedular (
+CREATE TABLE scheduler (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	date CHAR(8) NOT NULL DEFAULT '',
 	title VARCHAR(256) NOT NULL DEFAULT '',
 	comment TEXT NOT NULL DEFAULT '',
 	repeat VARCHAR(128) NOT NULL DEFAULT ''
 );
-CREATE INDEX schedular_date ON schedular (date);
+CREATE INDEX scheduler_date ON scheduler (date);
 `
 
 var db *sql.DB
@@ -30,6 +30,11 @@ func Init(dbFile string) error {
 		install = true
 	} else if err != nil {
 		return fmt.Errorf("check db file: %w", err)
+	}
+
+	db, err := sql.Open("sqlite", dbFile)
+	if err != nil {
+		return fmt.Errorf("open db: %w", err)
 	}
 
 	if install {
