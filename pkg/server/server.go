@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/abunasyr7/go-final-project/pkg/api"
 )
 
 const (
@@ -20,13 +22,13 @@ func Run() error {
 		return err
 	}
 
-	mux := http.NewServeMux()
-	mux.Handle("/", http.FileServer(http.Dir(webDir)))
+	http.Handle("/", http.FileServer(http.Dir(webDir)))
+	api.Init()
 
 	addr := fmt.Sprintf(":%d", port)
 	log.Printf("server listening in %s", addr)
 
-	return http.ListenAndServe(addr, mux)
+	return http.ListenAndServe(addr, nil)
 }
 
 func getPort() (int, error) {
