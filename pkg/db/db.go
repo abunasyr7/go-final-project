@@ -32,7 +32,7 @@ func Init(dbFile string) error {
 		return fmt.Errorf("check db file: %w", err)
 	}
 
-	db, err := sql.Open("sqlite", dbFile)
+	db, err = sql.Open("sqlite", dbFile)
 	if err != nil {
 		return fmt.Errorf("open db: %w", err)
 	}
