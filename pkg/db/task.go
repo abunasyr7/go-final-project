@@ -7,7 +7,7 @@ import "fmt"
 	Date	string `json:"date"`
 	Title	string `json:"title"`
 	Comment	string `json:"comment"`
-	Repeat	string `json:repeat`
+	Repeat	string `json:"repeat"`
  }
 
  func AddTask(task *Task) (int64, error) {
