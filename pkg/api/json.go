@@ -14,3 +14,8 @@ func writeJSON(w http.ResponseWriter, data any) {
 	}
 	w.Write(resp)
 }
+
+func writeError (w http.ResponseWriter, err error, status int) {
+	w.WriteHeader(status)
+	writeJSON(w, map[string]string{"error": err.Error()})
+}
