@@ -84,3 +84,16 @@ import (
 	}
 	return id, nil
  }
+
+ func GetTask(id string) (*Task, error) {
+	var t Task
+	err := db.QueryRow(
+		`SELECT id, date, title, comment, repeat FROM scheduler where id = ?`, id).
+		Scan(&t.ID, &t.Date, &t.Title, &t.Comment, &t.Repeat)
+	
+	if err != nil {
+		return nil, fmt.Errorf("tasks not found: %w", err)
+	}
+
+	return &t, nil
+ }
