@@ -64,6 +64,11 @@ import (
 	return tasks, nil
  }
 
+ func isDate(s string) bool {
+	_, err := time.Parse("02.01.2006", s)
+	return err == nil
+ }
+
  func AddTask(task *Task) (int64, error) {
 	var id int64
 
