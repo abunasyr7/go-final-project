@@ -1,6 +1,10 @@
 package db
 
-import "fmt"
+import (
+	"database/sql"
+	"fmt"
+	"time"
+)
  
  type Task struct {
 	ID 		string `json:"id"`
@@ -8,6 +12,56 @@ import "fmt"
 	Title	string `json:"title"`
 	Comment	string `json:"comment"`
 	Repeat	string `json:"repeat"`
+ }
+
+ const dateFormat = "20060102"
+
+ func Tasks (search string, limit int) ([]*Task, error) {
+	var rows *sql.Rows
+	var err error
+
+	switch {
+		case search == "":
+	
+			rows, err = db.Query(
+				`SELECT id, date, title, comment, repeat FROM scheduler WHERE date = ? ORDER BY date LIMIT ?`, 
+				limit)
+
+		case isDate(search):
+			d, _ := time.Parse("02.01.2006", search)
+			rows, err = db.Query(
+				`SELECT id, date, title, comment, repeat FROM scheduler WHERE date = ? ORDER BY date LIMIT ?`,
+				d.Format(dateFormat), limit)	
+				
+		default:
+			like := "%" + search + "%"
+			rows, err = db.Query(
+				`SELECT id, date, title, comment, repeat FROM scheduler
+				WHERE title LIKE ? OR comment LIKE ? ORDER BY date LIMIT ?`,
+				like, like, limit) 
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("query tasks: %w", err)
+	}
+
+	defer rows.Close()
+
+	tasks := []*Task{}
+
+	for rows.Next() {
+		var t Task
+		if err := rows.Scan(&t.ID, &t.Date, &t.Title, &t.Comment, &t.Repeat); err != nil {
+
+		}
+		tasks = append(tasks, &t)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("iterate tasks: %w", err)
+	}
+
+	return tasks, nil
  }
 
  func AddTask(task *Task) (int64, error) {
