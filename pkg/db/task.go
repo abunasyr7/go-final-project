@@ -80,7 +80,7 @@ import (
 
 	id, err = res.LastInsertId()
 	if err != nil {
-		return 0, fmt.Errorf("get last insert id: %w, err")
+		return 0, fmt.Errorf("get last insert id: %w", err)
 	}
 	return id, nil
  }
