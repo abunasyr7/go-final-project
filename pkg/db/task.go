@@ -24,7 +24,7 @@ import (
 		case search == "":
 	
 			rows, err = db.Query(
-				`SELECT id, date, title, comment, repeat FROM scheduler WHERE date = ? ORDER BY date LIMIT ?`, 
+				`SELECT id, date, title, comment, repeat FROM scheduler ORDER BY date LIMIT ?`, 
 				limit)
 
 		case isDate(search):

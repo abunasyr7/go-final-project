@@ -9,7 +9,7 @@ import (
 const tasksLiimit = 50
 
 type TasksResp struct {
-	Tasks []*db.Task `json:tasks`
+	Tasks []*db.Task `json:"tasks"`
 }
 
 func tasksHandler(w http.ResponseWriter, r *http.Request) {
