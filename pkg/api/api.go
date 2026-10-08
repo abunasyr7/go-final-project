@@ -2,7 +2,15 @@ package api
 
 import "net/http"
 
-// Init регистрирует все обработчики API.
+
 func Init() {
 	http.HandleFunc("/api/nextdate", nextDateHandler)
+	http.HandleFunc("/api/task", taskHandler)
+}
+
+func taskHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		addTaskHandler(w, r)
+	}
 }
