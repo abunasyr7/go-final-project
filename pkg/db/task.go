@@ -97,3 +97,24 @@ import (
 
 	return &t, nil
  }
+
+ func UpdateTask(task *Task) error {
+	query := `UPDATE scheduler SET date = ?, title = ?, comment = ?, repeate = ? WHERE id = ?`
+	res ,err := db.Exec(query, task.Date, task.Title, task.Comment, task.Repeat, task.ID)
+	if err != nil {
+		return fmt.Errorf("update task: %w", err)
+	}
+
+	count, err := res.RowsAffected()
+
+	if err != nil {
+		return fmt.Errorf("rows affected: %w", err)
+	}
+
+
+	if count == 0 {
+		return fmt.Errorf("task not found")
+	}
+
+	return nil
+ }

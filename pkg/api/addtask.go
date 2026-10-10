@@ -57,6 +57,7 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err = json.Unmarshal(body, &task); err != nil {
 		writeError(w, err, http.StatusBadRequest)
+		return
 	} 
 
 	if len(task.Title) == 0 {
