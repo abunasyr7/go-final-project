@@ -99,7 +99,7 @@ import (
  }
 
  func UpdateTask(task *Task) error {
-	query := `UPDATE scheduler SET date = ?, title = ?, comment = ?, repeate = ? WHERE id = ?`
+	query := `UPDATE scheduler SET date = ?, title = ?, comment = ?, repeat = ? WHERE id = ?`
 	res ,err := db.Exec(query, task.Date, task.Title, task.Comment, task.Repeat, task.ID)
 	if err != nil {
 		return fmt.Errorf("update task: %w", err)

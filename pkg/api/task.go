@@ -1,5 +1,15 @@
+package api
 
-func getTaskHandler (w http.ResponseWriter, r *http.Request) {
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+
+	"github.com/abunasyr7/go-final-project/pkg/db"
+)
+
+func getTaskHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if len(id) == 0 {
 		writeError(w, fmt.Errorf("no ID"), http.StatusBadRequest)
@@ -7,7 +17,7 @@ func getTaskHandler (w http.ResponseWriter, r *http.Request) {
 	}
 
 	task, err := db.GetTask(id)
-	if err !=nil {
+	if err != nil {
 		writeError(w, err, http.StatusInternalServerError)
 		return
 	}
@@ -31,11 +41,17 @@ func editTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	if len(task.ID) == 0 {
 		writeError(w, fmt.Errorf("no ID"), http.StatusBadRequest)
-		retrn
+		return
 	}
 
 	if len(task.Title) == 0 {
 		writeError(w, fmt.Errorf("no title"), http.StatusBadRequest)
+		return
+	}
+
+	if err = checkDate(&task); err != nil {
+		writeError(w, err, http.StatusBadRequest)
+		return
 	}
 
 	if err = db.UpdateTask(&task); err != nil {
@@ -43,5 +59,5 @@ func editTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, map[strinf]any{})
+	writeJSON(w, map[string]any{})
 }
