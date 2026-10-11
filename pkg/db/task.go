@@ -136,3 +136,21 @@ import (
 
 	return nil
  }
+
+ func UpdateDate(next string, id string) error {
+	res, err := db.Exec(`UPDATE scheduler SET date = ? WHERE id = ?`, next, id)
+	if err != nil {
+		return fmt.Errorf("update date: %w", err)
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("rows affected: %w", err)
+	}
+
+	if count == 0 {
+		return fmt.Errorf("task not found")
+	}
+
+	return nil
+ }
