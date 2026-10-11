@@ -118,3 +118,21 @@ import (
 
 	return nil
  }
+
+ func DeleteTask(id string) error {
+	res, err := db.Exec(`DELETE FROM scheduler WHERE id = ?`, id)
+	if err != nil {
+		return fmt.Errorf("delete task: %w", err)
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("rows affected: %w", err)
+	}
+
+	if count == 0 {
+		return fmt.Errorf("task not found")
+	}
+
+	return nil
+ }
